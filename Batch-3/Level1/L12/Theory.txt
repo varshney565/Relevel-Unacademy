@@ -1,0 +1,20 @@
+Pure Theortical Lecture,See Shivam's Notes.
+
+
+Topics : 
+         what is Database?
+         why Database?
+         FileBasedStorage System.
+            --> Drawback
+            --> how to inprove them.
+         DBMS
+            --> how to remove FBSS issue(CRUD,security,PL).
+         RDBMS
+            --> Tinder,How to achieve relationships.
+            --> strategies to build RDBMS table.
+         types of relationships.
+         Normalization
+            -->1NF
+            -->2NF
+            -->3NF
+         
