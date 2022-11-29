@@ -48,5 +48,34 @@ db.product = require("./product.model")(sequelize,Sequelize);
  * one to many relationship
  */
 db.category.hasMany(db.product);
+
+/**
+ * exporting the user schema
+ */
+
+db.user = require('./user.model')(sequelize,Sequelize);
+
+/**
+ * exporting the role schema
+ */
+
+db.role = require('./role.model')(sequelize,Sequelize);
+
+/**
+ * establishing the relationship between role and user.
+ */
+
+db.role.belongsToMany(db.user,{
+    throw : "user_roles",
+    foreignKey : "role_id",
+    otherKey : "user_id"
+});
+
+db.user.belongsToMany(db.roles,{
+    through : "user_roles",
+    foreignKey : "user_id",
+    otherKey : "role_id"
+});
+
 module.exports = db;
 
