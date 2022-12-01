@@ -66,12 +66,12 @@ db.role = require('./role.model')(sequelize,Sequelize);
  */
 
 db.role.belongsToMany(db.user,{
-    throw : "user_roles",
+    through : "user_roles",
     foreignKey : "role_id",
     otherKey : "user_id"
 });
 
-db.user.belongsToMany(db.roles,{
+db.user.belongsToMany(db.role,{
     through : "user_roles",
     foreignKey : "user_id",
     otherKey : "role_id"

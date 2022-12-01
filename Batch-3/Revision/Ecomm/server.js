@@ -39,6 +39,26 @@ function init(){
     }).catch(err=>{
         console.log("Some error while bulk-creating the categories");
     });
+
+
+    /**
+     * create the roles
+     */
+
+    db.role.bulkCreate([
+        {
+            id : 1,
+            name : "customer"
+        },
+        {
+            id : 2,
+            name : "admin"
+        }
+    ]).then(roles=>{
+        console.log("Roles added successfully in the database");
+    }).catch(err=>{
+        console.log("some error while adding the roles in the database");
+    });
 }
 
 /**
@@ -49,6 +69,10 @@ require("./routes/category.route")(app);
  * route for products
  */
 require("./routes/product.route")(app);
+/**
+ * route for signup and signin
+ */
+require("./routes/auth.route")(app);
 
 app.listen(process.env.PORT,()=>{
     console.log("Application started running");
