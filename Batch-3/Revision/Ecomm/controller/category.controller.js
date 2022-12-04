@@ -132,19 +132,10 @@ exports.destroy = async (req,res)=>{
     //which category needed to be deleted..
     const categoryId = req.params.id;
     try{
-        //find all the products that will be deleted once category got deleted.
-        const products = await product.findAll({
-            where : { categoryId : categoryId }
-        });
-        //find the id of all those products
-        const productIds = [];
-        for(x of products){
-            productIds.push(x.id);
-        }
-        //delete all those products
+        //delete all those products which has categoryId as req.body.id
         await product.destroy({
             where : {
-                id : {[Op.or] : productIds}
+                categoryId : categoryId
             }
         });
 
