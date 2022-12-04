@@ -2,7 +2,9 @@
  * This flle have the logic to process the incoming request.
  */
 
-const { category } = require("../model");
+const { category, product } = require("../model");
+const { Sequelize } = require("../model");
+const Op = Sequelize.Op;
 
 /**
  * controller for creating the category
@@ -107,7 +109,7 @@ exports.update = (req,res)=>{
         /**
          * [object,status]      object will be undefined because it did't return the actual object
          *                      status will be 0 if there is no such category with that id or some error
-         *                      status will be 1 if the category deleted successfully.
+         *                      status will be 1 if the category updated successfully.
          */
         //get the updated category
         return category.findByPk(categoryId);
@@ -126,11 +128,30 @@ exports.update = (req,res)=>{
  * controller for deleting a category
  */
 
-exports.destroy = (req,res)=>{
+exports.destroy = async (req,res)=>{
+    //which category needed to be deleted..
     const categoryId = req.params.id;
-    category.destroy({
-        where : {id : categoryId}
-    }).then(status=>{
+    try{
+        //find all the products that will be deleted once category got deleted.
+        const products = await product.findAll({
+            where : { categoryId : categoryId }
+        });
+        //find the id of all those products
+        const productIds = [];
+        for(x of products){
+            productIds.push(x.id);
+        }
+        //delete all those products
+        await product.destroy({
+            where : {
+                id : {[Op.or] : productIds}
+            }
+        });
+
+        //delete the category
+        const status = await category.destroy({
+            where : {id : categoryId}
+        })
         /**
          * status 1 : mean category deleted successfully.
          * status 0 : mean no such category exists or some error
@@ -138,10 +159,10 @@ exports.destroy = (req,res)=>{
         res.status(200).send({
             message :  `category with id : ${categoryId} deleted successfully`
         });
-    }).catch(err=>{
-        console.log("Error while updating the category");
+    }catch(err){
+        console.log("Error while deleting the category");
         res.status(500).send({
             message : err.name || "Some Internal Error"
         });
-    }); 
+    }
 };

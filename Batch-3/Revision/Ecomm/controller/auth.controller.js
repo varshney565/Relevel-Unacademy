@@ -19,7 +19,7 @@ exports.signup = (req,res)=>{
     
     user.create(userObj).then(userCreated=>{
         //add the role to the user
-        if(req.body.roles){
+        if(req.body.roles && req.body.roles.length > 0){
             //add those roles to the user
             role.findAll({
                 where : {
@@ -88,7 +88,7 @@ exports.signin = async (req,res)=>{
             return;
         }
         //generate the token
-        const token = jwt.sign({id : User.id},secret,{expiresIn : 100000});
+        const token = jwt.sign({id : User.id},secret,{expiresIn : 600});
         //get the roles attached to the user.
         const roles = await User.getRoles();
         const authorities = [];
