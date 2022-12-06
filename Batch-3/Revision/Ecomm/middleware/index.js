@@ -2,6 +2,7 @@ const { validateCategoryId , validateCategoryRequest } = require('./category.req
 const { validateProductId , validateProductRequest } = require('./product.requestValidator');
 const { signupRequestValidator , signinRequestValidator } = require("./auth.requestValidator");
 const { verifyToken , isAdmin} = require("./auth.jwt");
+const { productIdChecker , cartRequestValidator } = require("./cart.request");
 
 module.exports = {
     validateCategoryId : validateCategoryId,
@@ -11,5 +12,7 @@ module.exports = {
     signinRequestValidator : signinRequestValidator,
     signupRequestValidator : signupRequestValidator,
     verifyToken : verifyToken,
-    isAdmin : isAdmin
+    isAdmin : isAdmin,
+    productIdChecker : productIdChecker,
+    cartRequestValidator : cartRequestValidator
 };

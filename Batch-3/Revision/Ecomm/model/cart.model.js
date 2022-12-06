@@ -7,7 +7,7 @@ module.exports = (sequelize,Sequelize)=>{
         id : {
             type : Sequelize.INTEGER,
             primaryKey : true,
-            autoIncreament : true
+            autoIncrement : true
         },
         cost : {
             type : Sequelize.INTEGER

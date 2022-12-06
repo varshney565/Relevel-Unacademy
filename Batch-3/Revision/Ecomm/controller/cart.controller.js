@@ -2,8 +2,9 @@
  * Logic for creating a cart
  */
 
-const { cart } = require("../model")
-
+const { cart, product } = require("../model")
+const { Sequelize } = require("../model");
+const Op = Sequelize.Op;
 exports.create = (req,res)=>{
 
     //get the userId from req
@@ -26,20 +27,79 @@ exports.create = (req,res)=>{
  * Logic for updating a cart
  */
 
-exports.update = (req,res)=>{
-    
+exports.update = async (req,res)=>{
+    //find the cart
+    try{
+        const cartId = req.params.id;
+        const Cart = await cart.findByPk(cartId);
+        //find all the products
+        const productIds = req.body.productIds;
+        const Products = await product.findAll({
+            where : {
+                id : {
+                    [Op.or] : productIds
+                }
+            }
+        });
+        //now i have all the products and cart
+        //set all those products to the cart
+        await Cart.setProducts(Products);
+        //find the cost and { all the products with with name,cost,description }
+        let cost = 0;
+        let CartProducts = [];
+        for(let x of Products){
+            cost += x.cost;
+            CartProducts.push({
+                id : x.id,
+                name : x.name,
+                description : x.description,
+                cost : x.cost
+            });
+        }
+        const newCart = {
+            cost : cost,
+            userId : cart.userId
+        };
+
+        //updating the cart with the cost.
+        await Cart.update(newCart,{
+            where : {
+                id : cartId
+            }
+        });
+
+        res.status(200).send({
+            Products : CartProducts,
+            Cost : cost,
+            Status : "Success"
+        });
+    }catch(err){
+        console.log("Error while updating the cart..");
+        res.status(400).send({
+            message : err.name || "some Internal Error"
+        });
+    }
 }
 
-
 /**
- * Logic for deleting a cart
+ * Getting a cart based on id
  */
 
-/**
- * Logic for getting a cart based on id
- */
-
-
-/**
- * Logic for getting all the carts
- */
+exports.findOne = async (req,res)=>{
+    const Cart = await cart.findByPk(req.params.id);
+    const Products = await Cart.getProducts();
+    let CartProducts = [];
+    for(let x of Products){
+        CartProducts.push({
+            id : x.id,
+            name : x.name,
+            description : x.description,
+            cost : x.cost
+        });
+    }
+    res.status(200).send({
+        userId : Cart.userId,
+        products : CartProducts,
+        cost : Cart.cost
+    });
+};
