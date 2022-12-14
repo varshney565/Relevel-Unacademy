@@ -26,7 +26,8 @@ test.only("testing SpyOn Method",()=>{
      * that we have mocked
      */
     mockCallback.mockImplementation(()=>"Shivam");
-    const res = mockCallback(1,3);
+    const res = Calculator.add(1,3);
+    console.log(res);
     expect(mockCallback).toHaveBeenCalledTimes(1);
     expect(res).toBe("Shivam");
 });
