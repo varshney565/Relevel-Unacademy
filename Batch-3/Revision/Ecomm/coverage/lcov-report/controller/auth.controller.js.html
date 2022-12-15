@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">47.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/35</span>
+                <span class='fraction'>19/40</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">47.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/35</span>
+                <span class='fraction'>19/40</span>
             </div>
         
             
@@ -174,7 +174,11 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,23 +196,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,11 +311,13 @@ exports.signup = (req,res)=&gt;{
         email : req.body.email,
         password : bcrypt.hashSync(req.body.password,8)
     }
-    
+    console.log("call0");
     user.create(userObj).then(userCreated=&gt;{
         //add the role to the user
+        console.log("call1.a");
         if(req.body.roles &amp;&amp; req.body.roles.length &gt; 0){
             //add those roles to the user
+            console.log("call1.b");
             role.findAll({
                 where : {
                     name : {
@@ -315,12 +325,14 @@ exports.signup = (req,res)=&gt;{
                     }
                 }
             }).then(roles=&gt;{
+                console.log("call2");
                 //set those roles to the userObj
-                return userCreated.setRoles(roles);
-            }).then(()=&gt;{
-                console.log("User created successfully");
-                res.status(201).send({
-                    message : "User added successfully"
+                userCreated.setRoles(roles).then(()=&gt;{
+                    console.log("call3");
+                    console.log("User created successfully");
+                    res.status(201).send({
+                        message : "User added successfully"
+                    });
                 });
             })
         }else<span class="missing-if-branch" title="else path not taken" >E</span>{
@@ -403,7 +415,7 @@ exports.signin = <span class="fstat-no" title="function not covered" >as</span>y
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-14T18:02:11.524Z
+                at 2022-12-15T17:05:13.401Z
             </div>
         <script src="../prettify.js"></script>
         <script>

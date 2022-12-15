@@ -45,6 +45,7 @@ describe("Testing signup method",()=>{
         await signup(req,res);
         await expect(spyOnCreate).toHaveBeenCalled();
         await expect(spyOnFindAll).toHaveBeenCalled();
+        await expect(user.create).toHaveBeenCalled();
         await expect(role.findAll).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.send).toHaveBeenCalledWith({"message" : "User added successfully"});

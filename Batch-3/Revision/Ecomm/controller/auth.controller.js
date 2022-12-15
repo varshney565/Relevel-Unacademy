@@ -29,11 +29,11 @@ exports.signup = (req,res)=>{
                 }
             }).then(roles=>{
                 //set those roles to the userObj
-                return userCreated.setRoles(roles);
-            }).then(()=>{
-                console.log("User created successfully");
-                res.status(201).send({
-                    message : "User added successfully"
+                userCreated.setRoles(roles).then(()=>{
+                    console.log("User created successfully");
+                    res.status(201).send({
+                        message : "User added successfully"
+                    });
                 });
             })
         }else{
