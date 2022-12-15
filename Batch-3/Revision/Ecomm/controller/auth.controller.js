@@ -7,7 +7,7 @@ const { user , role , Sequelize} = require("../model");
 const Op = Sequelize.Op;
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config/secret");
-exports.signup = (req,res)=>{
+exports.signup = async (req,res)=>{
     /**
      * get the req body
      */
@@ -16,58 +16,54 @@ exports.signup = (req,res)=>{
         email : req.body.email,
         password : bcrypt.hashSync(req.body.password,8)
     }
-    
-    user.create(userObj).then(userCreated=>{
+    try{
+        const userCreated = await user.create(userObj);
         //add the role to the user
         if(req.body.roles && req.body.roles.length > 0){
             //add those roles to the user
-            role.findAll({
+            const roles = await role.findAll({
                 where : {
                     name : {
                         [Op.or] : req.body.roles
                     }
                 }
-            }).then(roles=>{
-                //set those roles to the userObj
-                userCreated.setRoles(roles).then(()=>{
-                    console.log("User created successfully");
-                    res.status(201).send({
-                        message : "User added successfully"
-                    });
-                });
-            })
+            });
+
+            //set those roles to the userObj
+            await userCreated.setRoles(roles);
+            console.log("User created successfully");
+            res.status(201).send({
+                message : "User added successfully"
+            });
         }else{
             //add customer role to the user
 
-
-            // role.findOne({
+            // const Role = await role.findOne({
             //     where : {
             //         name : "customer"
             //     }
-            // }).then(Role=>{
-            //     return userCreated.setRoles([Role]);
-            // }).then(()=>{
-            //     console.log("User created successfully");
-            //     res.status(201).send({
-            //         message : "User added successfully"
-            //     });
             // })
+            // await userCreated.setRoles([Role]);
+            // 
+            // console.log("User created successfully");
+            // res.status(201).send({
+            //     message : "User added successfully"
+            // });
 
             //or
 
-            userCreated.setRoles([1]).then(()=>{
-                console.log("User created successfully");
-                res.status(201).send({
-                    message : "User added successfully"
-                });
+            await userCreated.setRoles([1]);
+            console.log("User created successfully");
+            res.status(201).send({
+                message : "User added successfully"
             });
         }
-    }).catch(err=>{
+    }catch(err){
         console.log("some error while creating the user");
         res.status(500).send({
             message : err.name || "some internal error"
         });
-    });
+    };
 }
 
 /**

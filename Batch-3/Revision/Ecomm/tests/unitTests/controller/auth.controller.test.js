@@ -20,6 +20,13 @@ beforeEach(()=>{
 
 
 describe("Testing signup method",()=>{
+
+    afterEach(() => {
+        //it will clear all the mock that we have
+        //created within each test block
+        jest.clearAllMocks();
+    });
+
     /**
      * 1.   Signup is successful
      */
@@ -36,17 +43,20 @@ describe("Testing signup method",()=>{
          */
         const roles = req.body.roles;
         const resFromCreate = {
-            ...req.body,
+            id : req.body.id,
+            username : req.body.usermae,
+            email : req.body.email,
+            password : req.body.password,
             setRoles : async () => Promise.resolve()
         }
 
-        const spyOnCreate = jest.spyOn(user,"create").mockImplementation((userWithRoles)=>Promise.resolve(resFromCreate));
-        const spyOnFindAll = jest.spyOn(role,"findAll").mockImplementation((roles)=>Promise.resolve(roles));
+        let spyOnCreate = jest.spyOn(user,"create").mockImplementation(()=>Promise.resolve(resFromCreate));
+        let spyOnFindAll = jest.spyOn(role,"findAll").mockImplementation(()=>Promise.resolve(roles));
         await signup(req,res);
-        await expect(spyOnCreate).toHaveBeenCalled();
-        await expect(spyOnFindAll).toHaveBeenCalled();
-        await expect(user.create).toHaveBeenCalled();
-        await expect(role.findAll).toHaveBeenCalled();
+        expect(spyOnCreate).toHaveBeenCalled();
+        expect(spyOnFindAll).toHaveBeenCalled();
+        expect(user.create).toHaveBeenCalled();
+        expect(role.findAll).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.send).toHaveBeenCalledWith({"message" : "User added successfully"});
     })
@@ -54,19 +64,59 @@ describe("Testing signup method",()=>{
     /**
      * 1.2. when user did't provide any roles
      */
-    // it("successful signup,when we don't provide the roles ",()=>{
-
-    // })
+    it("successful signup,when we don't provide the roles ",async ()=>{
+        req.body = userWithoutRoles;
+        const resFromCreate = {
+            id : req.body.id,
+            username : req.body.usermae,
+            email : req.body.email,
+            password : req.body.password,
+            setRoles : async () => Promise.resolve(),
+            getRoles : async () => Promise.resolve()
+        }
+        //mock the required functions
+        let spyOnCreate = jest.spyOn(user,'create').mockImplementation(()=>Promise.resolve(resFromCreate));
+        
+        await signup(req,res);
+        expect(spyOnCreate).toHaveBeenCalled();
+        expect(user.create).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.send).toHaveBeenCalledWith({
+            message : "User added successfully"
+        });
+    })
 
     /**
      * 2.   Signup failed
      */
-    // it("signup failed",()=>{
+    it("signup failed", async ()=>{
+        req.body = userWithoutRoles;
+        /**
+         * Mock the required functions
+         */
+        let spyOnCreate = jest.spyOn(user,'create').mockImplementation(()=>Promise.reject("Error"));
+        let spyOnFindAll = jest.spyOn(role,'findAll').mockImplementation(()=>Promise.resolve());
 
-    // });
+        await signup(req,res);
+        
+        expect(spyOnCreate).toHaveBeenCalled();
+        expect(user.create).toHaveBeenCalled();
+        //this function did't called because we have terminated the executation in the user-creation itself.
+        expect(spyOnFindAll).not.toHaveBeenCalled();
+        expect(role.findAll).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.send).toHaveBeenCalledWith({
+            message : "some internal error"
+        });
+    });
 })
 
 
 /**
  * Test the signin method
  */
+
+
+describe("Testing signin method",()=>{
+
+})
