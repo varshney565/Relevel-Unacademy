@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">72.97% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/36</span>
+                <span class='fraction'>27/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/10</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">72.97% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/36</span>
+                <span class='fraction'>27/37</span>
             </div>
         
             
@@ -170,7 +170,8 @@
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,18 +244,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,19 +351,20 @@ exports.signup = async (req,res)=&gt;{
  * logic for signing in the user.
  */
 &nbsp;
-exports.signin = <span class="fstat-no" title="function not covered" >as</span>ync (req,res)=&gt;{
-<span class="cstat-no" title="statement not covered" >    try{</span>
+exports.signin = async (req,res)=&gt;{
+    try{
         //find the user
-        const User = <span class="cstat-no" title="statement not covered" >await user.findOne({where : {email : req.body.email}});</span>
+        const User = await user.findOne({where : {email : req.body.email}});
         //check whether password matches or not
-        const output = <span class="cstat-no" title="statement not covered" >await bcrypt.compare(req.body.password,User.password);</span>
-<span class="cstat-no" title="statement not covered" >        if(!output){</span>
-<span class="cstat-no" title="statement not covered" >            console.log("Wrong Password..");</span>
-<span class="cstat-no" title="statement not covered" >            res.status(400).send({</span>
+        const output = await bcrypt.compare(req.body.password,User.password);
+        <span class="missing-if-branch" title="else path not taken" >E</span>if(!output){
+            console.log("Wrong Password..");
+            res.status(400).send({
                 message : "Wrong Password"
             });
-<span class="cstat-no" title="statement not covered" >            return;</span>
+            return;
         }
+<span class="cstat-no" title="statement not covered" >        console.log(output);</span>
         //generate the token
         const token = <span class="cstat-no" title="statement not covered" >jwt.sign({id : User.id},secret,{expiresIn : 600});</span>
         //get the roles attached to the user.
@@ -391,7 +394,7 @@ exports.signin = <span class="fstat-no" title="function not covered" >as</span>y
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-15T19:02:30.198Z
+                at 2022-12-16T12:58:25.131Z
             </div>
         <script src="../prettify.js"></script>
         <script>

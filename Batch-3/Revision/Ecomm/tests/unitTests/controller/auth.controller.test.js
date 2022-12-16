@@ -9,10 +9,12 @@ const { signin , signup } = require("../../../controller/auth.controller");
 const { user , role } = require("../../../model");
 const userWithRoles = require("../mockData/newUserWithRoles.json");
 const userWithoutRoles = require("../mockData/newUserWithoutRoles.json");
+const userSigninDetals = require("../mockData/signIn.json");
+const bcrypt = require("bcryptjs");
 
 beforeEach(()=>{
     /**
-     * whatever i write here will be executed before every describe test 
+     * whatever i write here will be executed before every test 
      */
     req = mockRequest();
     res = mockResponse();
@@ -118,5 +120,57 @@ describe("Testing signup method",()=>{
 
 
 describe("Testing signin method",()=>{
+    /**
+     * Successful signup
+     */
+    it("signup successful",async ()=>{
+        /**
+         * set the request body
+         */
+        req.body = userSigninDetals;
+        /**
+         * result from finding the user
+         */
+        const userReturned = {
+            id : userWithRoles.id,
+            email : userWithRoles.email,
+            username : userWithRoles.username,
+            password : bcrypt.hashSync(userWithRoles.password,8),
+            setRoles : async ()=> Promise.resolve(),
+            getRoles : async ()=> Promise.resolve(userWithRoles.roles)
+        }
+        /**
+         * mock the functions
+         */
 
+        /**
+         * mocking user.findOne()
+         */
+        const spyOnUserFind = jest.spyOn(user,'findOne').mockImplementation(()=>Promise.resolve(userReturned));
+
+        /**
+         * mocking bcrypt.compare()
+         */
+        const spyOnBcyptCompare = jest.spyOn(bcrypt,'compare').mockImplementation(()=>Promise.resolve(true));
+        await signin(req,res);
+
+        expect(bcrypt.compare).toHaveBeenCalled();
+        expect(spyOnBcyptCompare).toHaveBeenCalled();
+    })
+
+    /**
+     * signup failed due to wrong password of the user.
+     */
+
+    it("signup failed,wrong password provided",()=>{
+
+    })
+
+    /**
+     * signup failed due to some internal error
+     */
+
+    it("signup failed due to internal issue",()=>{
+
+    })
 })
