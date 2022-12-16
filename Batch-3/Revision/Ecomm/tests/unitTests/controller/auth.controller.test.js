@@ -1,16 +1,23 @@
+
 /**
- * Test the signup method
+ * testing the auth.controller.js file : signin and signup method
  */
 
-let req , res;
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const { mockRequest , mockResponse } = require("../interceptor");
-const { signin , signup } = require("../../../controller/auth.controller");
-const { user , role } = require("../../../model");
 const userWithRoles = require("../mockData/newUserWithRoles.json");
 const userWithoutRoles = require("../mockData/newUserWithoutRoles.json");
 const userSigninDetals = require("../mockData/signIn.json");
-const bcrypt = require("bcryptjs");
+
+const { signin , signup } = require("../../../controller/auth.controller");
+const { user , role } = require("../../../model");
+
+const { mockRequest , mockResponse } = require("../interceptor");
+
+let req , res;
+
+
 
 beforeEach(()=>{
     /**
@@ -19,6 +26,11 @@ beforeEach(()=>{
     req = mockRequest();
     res = mockResponse();
 });
+
+/**
+ * Test the signup method
+ */
+
 
 
 describe("Testing signup method",()=>{
@@ -135,13 +147,18 @@ describe("Testing signin method",()=>{
             id : userWithRoles.id,
             email : userWithRoles.email,
             username : userWithRoles.username,
-            password : bcrypt.hashSync(userWithRoles.password,8),
+            password : userWithRoles.password,
             setRoles : async ()=> Promise.resolve(),
-            getRoles : async ()=> Promise.resolve(userWithRoles.roles)
+            getRoles : async ()=> Promise.resolve([{
+                name : 'admin'
+            },{
+                name : 'customer'
+            }])
         }
         /**
          * mock the functions
          */
+
 
         /**
          * mocking user.findOne()
@@ -150,27 +167,109 @@ describe("Testing signin method",()=>{
 
         /**
          * mocking bcrypt.compare()
+         * and making sure that password is matching
          */
         const spyOnBcyptCompare = jest.spyOn(bcrypt,'compare').mockImplementation(()=>Promise.resolve(true));
-        await signin(req,res);
+        /**
+         * Mocking jwt.sign()
+         */
+        const spyOnJwtSign = jest.spyOn(jwt,'sign').mockImplementation(()=>"Token");
 
+        await signin(req,res);
+        /**
+         * checking whether expected behaviour is metching with the actual behaviour or not
+         */
+        expect(spyOnUserFind).toHaveBeenCalled();
+        expect(user.findOne).toHaveBeenCalled();
         expect(bcrypt.compare).toHaveBeenCalled();
         expect(spyOnBcyptCompare).toHaveBeenCalled();
+        expect(spyOnJwtSign).toHaveBeenCalled();
+        expect(jwt.sign).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.send).toHaveBeenCalledWith({
+            id : userWithRoles.id,
+            email : userWithRoles.email,
+            username : userWithRoles.username,
+            roles : ["ROLE_ADMIN","ROLE_CUSTOMER"],
+            accessToken : "Token"
+        });
     })
 
     /**
      * signup failed due to wrong password of the user.
      */
 
-    it("signup failed,wrong password provided",()=>{
+    it("signup failed,wrong password provided",async ()=>{
+        /**
+         * set the request body
+         */
+        req.body = userSigninDetals;
+        /**
+         * result from finding the user
+         */
+        const userReturned = {
+            id : userWithRoles.id,
+            email : userWithRoles.email,
+            username : userWithRoles.username,
+            password : userWithRoles.password,
+            setRoles : async ()=> Promise.resolve(),
+            getRoles : async ()=> Promise.resolve([{
+                name : 'admin'
+            },{
+                name : 'customer'
+            }])
+        }
+        /**
+         * mock the functions
+         */
 
+
+        /**
+         * mocking user.findOne()
+         */
+        const spyOnUserFind = jest.spyOn(user,'findOne').mockImplementation(()=>Promise.resolve(userReturned));
+
+        /**
+         * mocking bcrypt.compare() and making sure that password 
+         * is not matching
+         */
+        const spyOnBcyptCompare = jest.spyOn(bcrypt,'compare').mockImplementation(()=>Promise.resolve(false));
+
+        await signin(req,res);
+        /**
+         * checking whether expected behaviour is metching with the actual behaviour or not
+         */
+        expect(spyOnUserFind).toHaveBeenCalled();
+        expect(user.findOne).toHaveBeenCalled();
+        expect(bcrypt.compare).toHaveBeenCalled();
+        expect(spyOnBcyptCompare).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.send).toHaveBeenCalledWith({
+            message : "Wrong Password"
+        });
     })
 
     /**
      * signup failed due to some internal error
      */
 
-    it("signup failed due to internal issue",()=>{
+    it("signup failed due to internal issue",async ()=>{
+        req.body = userSigninDetals;
+        /**
+         * mocking user.findOne()
+         */
+        const spyOnUserFind = jest.spyOn(user,'findOne').mockImplementation(()=>Promise.reject(Error("This is Error")));
 
+        /**
+         * calling  the signin function
+         */
+        await signin(req,res);
+
+        expect(spyOnUserFind).toHaveBeenCalled();
+        expect(user.findOne).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.send).toHaveBeenCalledWith({
+            message : "This is Error"
+        });
     })
 })

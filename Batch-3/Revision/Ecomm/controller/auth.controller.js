@@ -61,7 +61,7 @@ exports.signup = async (req,res)=>{
     }catch(err){
         console.log("some error while creating the user");
         res.status(500).send({
-            message : err.name || "some internal error"
+            message : err.message || "some internal error"
         });
     };
 }
@@ -78,7 +78,7 @@ exports.signin = async (req,res)=>{
         const output = await bcrypt.compare(req.body.password,User.password);
         if(!output){
             console.log("Wrong Password..");
-            res.status(400).send({
+            res.status(401).send({
                 message : "Wrong Password"
             });
             return;
@@ -99,10 +99,9 @@ exports.signin = async (req,res)=>{
             accessToken : token
         });
     }catch(err){
-        console.log(err);
         console.log("Error while logging in...");
         res.status(500).send({
-            message : err.name || "Internal Error"
+            message : err.message || "Internal Error"
         });
     }
 };
