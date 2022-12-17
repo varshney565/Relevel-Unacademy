@@ -9,27 +9,29 @@ const Op = Sequelize.Op;
 /**
  * controller for creating the category
  */
-exports.create = (req,res)=>{
+exports.create = async (req,res)=>{
     const newCategory = {
         name : req.body.name,
         description : req.body.description
     }
-    category.create(newCategory).then(Category=>{
+
+    try{
+        const Category = await category.create(newCategory);
         console.log(`category : ${Category.name} added successfully`);
         res.status(201).send(Category);
-    }).catch(err=>{
+    }catch(err){
         console.log("Error while creating the category.");
         res.status(500).send({
-            message : err.name || "Some internal server Error"
+            message : err.message || "Some internal server Error"
         });
-    })
+    }
 };
 
 
 /**
  * controller for fetching list of all the categories that are present.
  */
-exports.findAll = (req,res)=>{
+exports.findAll = async (req,res)=>{
     /**
      * if i did't get a query param then no filter,will return all the categories.
      */
@@ -38,51 +40,53 @@ exports.findAll = (req,res)=>{
      * name of the category that needed to be fetcched.
      */
     const categoryName = req.query.name;
-    let promise;
+    let categories;
 
-    if(categoryName){
+    try{
+        if(categoryName){
+            /**
+             * fetching the category with given name
+             */
+            categories = await category.findAll({
+                where : {name : categoryName}
+            });
+        }else{
+            /**
+             * fetching all the categories
+             */
+            categories = await category.findAll();
+        }
+        
         /**
-         * fetching the category with given name
+         * fetching the category
          */
-        promise = category.findAll({
-            where : {name : categoryName}
-        });
-    }else{
-        /**
-         * fetching all the categories
-         */
-        promise = category.findAll();
-    }
-    
-    /**
-     * fetching the category
-     */
-    promise.then(categories=>{
+        
         console.log("categories fetched successfully..");
         res.status(200).send(categories);
-    }).catch(err=>{
+    }catch(err){
         console.log("Error while fetching the categories.");
         res.status(500).send({
-            message : err.name || "Some internal server Error"
+            message : err.message || "Some internal server Error"
         });
-    })
+    }
 };
 
 
 /**
  * controller for fetching a category by its id
  */
-exports.findOne = (req,res)=>{
+exports.findOne = async (req,res)=>{
     const categoryId = req.params.id;
-    category.findByPk(categoryId).then(category=>{
-        console.log(`category with id : ${categoryId} is ${category.name}`);
+    try{
+        const Category = await category.findByPk(categoryId);
+        console.log(`category with id : ${categoryId} is ${Category.name}`);
         res.status(200).send(category);
-    }).catch(err=>{
+    }catch(err){
         console.log("Error while fetching the categories.");
         res.status(500).send({
             message : err.name || "Some internal server Error"
         });
-    })
+    }
 }
 
 /**

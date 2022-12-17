@@ -6,8 +6,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const userWithRoles = require("../mockData/newUserWithRoles.json");
-const userWithoutRoles = require("../mockData/newUserWithoutRoles.json");
+const userWithRoles = require("../mockData/userWithRoles.json");
+const userWithoutRoles = require("../mockData/userWithoutRoles.json");
 const userSigninDetals = require("../mockData/signIn.json");
 
 const { signin , signup } = require("../../../controller/auth.controller");
@@ -61,7 +61,8 @@ describe("Testing signup method",()=>{
             username : req.body.usermae,
             email : req.body.email,
             password : req.body.password,
-            setRoles : async () => Promise.resolve()
+            setRoles : async () => Promise.resolve(),
+            getRoles : async () => Promise.resolve(req.body.roles)
         }
 
         let spyOnCreate = jest.spyOn(user,"create").mockImplementation(()=>Promise.resolve(resFromCreate));
@@ -86,7 +87,7 @@ describe("Testing signup method",()=>{
             email : req.body.email,
             password : req.body.password,
             setRoles : async () => Promise.resolve(),
-            getRoles : async () => Promise.resolve()
+            getRoles : async () => Promise.resolve(req.body.roles)
         }
         //mock the required functions
         let spyOnCreate = jest.spyOn(user,'create').mockImplementation(()=>Promise.resolve(resFromCreate));
@@ -132,6 +133,16 @@ describe("Testing signup method",()=>{
 
 
 describe("Testing signin method",()=>{
+
+
+    /**
+     * clearing all the mocks after each tests
+     */
+    afterEach(()=>{
+        //this line will clear all the mocks 
+        jest.clearAllMocks();
+    })
+
     /**
      * Successful signup
      */
