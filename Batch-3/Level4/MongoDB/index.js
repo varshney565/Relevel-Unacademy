@@ -17,10 +17,24 @@ mongoose.connect("mongodb://localhost/mongoosedemo",()=>{
 //DB-Operations
 const Student = require("./models/student.model")(mongoose);
 async function dbOperation(){
-    const st = await Student.create({
-        name : "Shivam",
-        age : 22
-    });
-    console.log(st);
+    try{
+        const st = await Student.create({
+            name : "Shivam",
+            age : 22,
+            email : "shivamvarshney565@gmail.com",
+            subjects : ["OS","C++"],
+            address : {
+                lane1 : "l1",
+                lane2 : "l2",
+                street : "s1",
+                city : "Banglore",
+                country : "India",
+                pincode : 111111
+            }
+        });
+        console.log(st); 
+    }catch(err){
+        console.log("Error : ",err);
+    }
 }
 dbOperation();
