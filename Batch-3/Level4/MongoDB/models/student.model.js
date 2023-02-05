@@ -41,7 +41,13 @@ module.exports = (mongoose)=>{
             type : Date,
             default : ()=> Date.now()
         },
-        subjects : [String],
+        subjects : {
+            type : [String],
+            validate : {
+                validator : s => s.length,
+                message : props => "subject list can't be empty"
+            }
+        },
         address : addressSchema  //Embedded document
     });
     return mongoose.model("student",studentSchema);
