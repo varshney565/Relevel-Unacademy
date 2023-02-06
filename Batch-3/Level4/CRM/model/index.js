@@ -1,11 +1,17 @@
 /**
- * This file is used to connect to database.
+ * This file will expose all the collections that will be present in the mongoDB database.
  */
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/CRM',()=>{
-    console.log("application is connected with the database");
-},err=>{
-    console.log("Error while connecting with database.");
-});
 
-const User = require('./user.model');
+const mongoose = require('mongoose');
+
+
+/**
+ * getting the user collection.
+ */
+const User = require('./user.model')(mongoose);
+
+
+db = {};
+db.mongoose = mongoose;
+db.User = User;
+module.exports = db;
