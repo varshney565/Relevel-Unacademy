@@ -75,6 +75,7 @@ exports.signup = async (req,res)=>{
         })
     }catch(err){
         console.log("Some error while creating the user.");
+        console.log(err);
         res.status(500).send({
             messgae : err.name || "Internal Error"
         })
@@ -102,7 +103,7 @@ exports.signin = async (req,res)=>{
         const user = await User.findOne({userId : userData.userId});
         if(!user){
             console.log("No such user with this userId.");
-            res.staus(400).send({
+            res.status(400).send({
                 message : "Failed! UserId does't exist."
             })
             return;
@@ -110,10 +111,10 @@ exports.signin = async (req,res)=>{
         /**
          * Whether password is correct or not.
          */
-        const res = bcrypt.compareSync(userData.password,user.password);
-        if(!res){
+        const result = bcrypt.compareSync(userData.password,user.password);
+        if(!result){
             console.log("Wrong Password Provided.");
-            res.staus(401).send({
+            res.status(401).send({
                 message : "Wrong Password Provided."
             })
             return;
@@ -154,6 +155,7 @@ exports.signin = async (req,res)=>{
         })
     }catch(err){
         console.log("some error while logging in");
+        console.log(err);
         res.status(500).send({
             message : err.name || "Internal Erorr"
         });
