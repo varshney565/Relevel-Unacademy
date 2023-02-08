@@ -24,7 +24,6 @@
 const {User} = require('../model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { secret } = require('../config/server.secret');
 
 /**
  * Logic for signup
@@ -133,7 +132,7 @@ exports.signin = async (req,res)=>{
         /**
          * Generate a Token.
          */
-        const token = jwt.sign({id : user.userId,},secret,{
+        const token = jwt.sign({id : user.userId,},process.env.secret,{
             expiresIn : 600
         });
         /**

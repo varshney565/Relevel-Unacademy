@@ -5,14 +5,16 @@
 const express = require("express");
 const app = express();
 const bcrypt = require('bcrypt');
+
 /**
- * DB credintials.
+ * 
+ * if NODE_ENV is not production.
+ * setting the congiguration data in process.env ; 
+ * 
  */
-const {DB_URL} = require('./config/db.config');
-/**
- * setting the congiguration data in process.env ; if NODE_ENV is not production.
- */
-require("./config/server.config");
+
+require('./config');
+
 /**
  * body-parser
  */
@@ -39,7 +41,7 @@ const {User} = require('./model');
  * it is more reliable (bettwe way) of connecting to MongoDB.
  */
 const mongoose = require('mongoose');
-mongoose.connect(DB_URL);
+mongoose.connect(process.env.DBURL);
 const database = mongoose.connection;
 database.on("error",()=>{
     console.log("Error while connecting to MongoDB.");
