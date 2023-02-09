@@ -1,3 +1,5 @@
+const { userStatus , userTypes} = require("../utils/contants");
+
 module.exports = (mongoose)=>{
     const userSchema = new mongoose.Schema({
         name : {
@@ -34,12 +36,12 @@ module.exports = (mongoose)=>{
         userType : {
             type : String,
             required : true,
-            default : "CUSTOMER"
+            default : userTypes.customer
         },
         userStatus : {
             type : String,
             required : true,
-            default : "APPROVED"
+            default : userStatus.approved
         }
     });
     return mongoose.model('user',userSchema);

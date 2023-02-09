@@ -24,6 +24,7 @@
 const {User} = require('../model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { userTypes ,userStatus} = require('../utils/contants');
 
 /**
  * Logic for signup
@@ -38,11 +39,12 @@ exports.signup = async (req,res)=>{
         userId : req.body.userId,
         name : req.body.name,
         email : req.body.email,
-        password : bcrypt.hashSync(req.body.password,8)
+        password : bcrypt.hashSync(req.body.password,8),
+        userType : req.body.userType
     }
 
-    if(req.body.userType &&  req.body.userType == "ENGINEER"){
-        user.userStatus = "PENDING"
+    if(user.userType == userTypes.engineer){
+        user.userStatus = userStatus.pending
     }
     /**
      * insert the data in database and return the response
@@ -100,13 +102,6 @@ exports.signin = async (req,res)=>{
      */
     try{
         const user = await User.findOne({userId : userData.userId});
-        if(!user){
-            console.log("No such user with this userId.");
-            res.status(400).send({
-                message : "Failed! UserId does't exist."
-            })
-            return;
-        }
         /**
          * Whether password is correct or not.
          */
