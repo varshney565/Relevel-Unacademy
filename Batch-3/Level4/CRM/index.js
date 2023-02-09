@@ -75,18 +75,15 @@ async function init(){
 
 
 
-
-
-
 /**
- * routes for auth
+ * routes for auth.
  * 
  */
 require('./routes/auth.routes')(app);
-
-
-
-
+/**
+ * route for users.
+ */
+require('./routes/user.route')(app);
 
 
 

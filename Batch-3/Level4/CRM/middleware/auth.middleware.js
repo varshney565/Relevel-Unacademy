@@ -97,7 +97,7 @@ exports.validateSignUpRequestBody = async (req,res,next) => {
         let user = await User.findOne({userId : req.body.userId});
         if(user){
             console.log("UserId already exists.");
-            res.status(400).send({
+            res.status(403).send({
                 message : "UserId already exists."
             });
             return;
@@ -111,7 +111,7 @@ exports.validateSignUpRequestBody = async (req,res,next) => {
         user = await User.findOne({email : req.body.email});
         if(user){
             console.log("email already exists.");
-            res.status(400).send({
+            res.status(403).send({
                 message : "email already exists."
             });
             return;

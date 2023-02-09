@@ -36,12 +36,14 @@ module.exports = (mongoose)=>{
         userType : {
             type : String,
             required : true,
-            default : userTypes.customer
+            default : userTypes.customer,
+            enum : [userTypes.customer,userTypes.engineer,userTypes.admin]
         },
         userStatus : {
             type : String,
             required : true,
-            default : userStatus.approved
+            default : userStatus.approved,
+            enum : [userStatus.pending,userStatus.approved,userStatus.rejected]
         }
     });
     return mongoose.model('user',userSchema);

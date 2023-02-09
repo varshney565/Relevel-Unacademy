@@ -97,10 +97,10 @@ exports.signin = async (req,res)=>{
         password : req.body.password
     };
 
-    /**
-     * Whether userId that is provided is correct or not.
-     */
     try{
+        /**
+         * find the user
+         */
         const user = await User.findOne({userId : userData.userId});
         /**
          * Whether password is correct or not.
@@ -113,16 +113,6 @@ exports.signin = async (req,res)=>{
             })
             return;
         }
-        /**
-         * check if the userStatus is not PENDING is yes : he can't login.
-         */
-        if(user.userStatus == "PENDING"){
-            res.status(403).send({
-                message : "Not have permisions, must be approved by ADMIN first."
-            })
-            return;
-        }
-
 
         /**
          * Generate a Token.
