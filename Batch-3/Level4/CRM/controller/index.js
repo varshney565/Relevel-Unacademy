@@ -7,9 +7,12 @@
  */
 
 const auth = require('./auth.controller');
-
+const user = require('./user.controller');
 
 module.exports = {
     signup : auth.signup,
-    signin : auth.signin
+    signin : auth.signin,
+    findAll : user.findAll,
+    findByUserId : user.findByUserId,
+    update : user.update
 }

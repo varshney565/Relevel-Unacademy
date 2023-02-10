@@ -1,5 +1,5 @@
 /**
- * This file is for validating the sign
+ * This file is for validating the signin and signup request body
  */
 
 const { User } = require("../model");

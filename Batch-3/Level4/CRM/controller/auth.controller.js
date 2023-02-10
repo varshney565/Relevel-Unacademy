@@ -118,7 +118,7 @@ exports.signin = async (req,res)=>{
          * Generate a Token.
          */
         const token = jwt.sign({id : user.userId,},process.env.secret,{
-            expiresIn : 600
+            expiresIn : 3000
         });
         /**
          * Return the response.

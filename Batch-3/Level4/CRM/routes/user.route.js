@@ -2,8 +2,8 @@
  * This file will route the incoming request to the corroponding user.controller method.
  */
 
-const { findAll } = require("../controller/user.controller");
-const { isAdmin, verifyToken } = require("../middleware");
+const { findAll, findByUserId, update } = require("../controller");
+const { isAdmin, verifyToken, isOwnerOrAdmin, isValidUserIdInPathparam, isAdminUpdate } = require("../middleware");
 
 module.exports = (app)=>{
     /**
@@ -14,9 +14,9 @@ module.exports = (app)=>{
     /**
      * GET    "/crm/api/v1/users/:id"
      */
-
+    app.get("/crm/api/v1/users/:id",[verifyToken,isValidUserIdInPathparam,isOwnerOrAdmin],findByUserId);
     /**
      * PUT    "/crm/api/v1/users/:id"
      */
-
+    app.put("/crm/api/v1/users/:id",[verifyToken,isValidUserIdInPathparam,isAdminUpdate,isOwnerOrAdmin],update);
 }
