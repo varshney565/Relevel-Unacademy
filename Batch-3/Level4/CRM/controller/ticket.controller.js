@@ -75,7 +75,67 @@ exports.createTicket = async (req,res)=>{
 
 
 /**
- * logic for finding all the tickets.
+ * logic for searching the tickets.
  * 
- * ADMIN access necessary.
+ * Admin should be able to search all the tickets.
+ * Customer should be able to search the tickets created by him.
+ * Engineer should be able to search the tickets assigned to him and also tickets raised by him.
  */
+
+exports.searchTickets = async (req,res)=>{
+    /**
+     * find the user.
+     */
+    const user = await User.findOne({
+        userId : req.userId
+    });
+    /**
+     * check what type of user it is and depending on that take the action.
+     */
+    try{
+        let query = {};
+        if(user.userType == userTypes.customer){
+            /**
+             * customer user
+             * find all the tickets created by that customer.
+             * */
+            query = {
+                _id : {
+                    $in : user.ticketsCreated
+                }
+            };
+        }else if(user.userType == userTypes.engineer){
+            /**
+             * engineer user
+             * find the tickets that are created by him and also assigned to him.
+             * */
+
+            query = {$or : [
+                {
+                    _id : {$in : user.ticketsAssigned}
+                },
+                {
+                    _id : {$in : user.ticketsCreated}
+                }
+            ]};
+            /**
+             * or 
+             * const tickets = user.ticketsAssigned.concat(user.ticketsCreated);
+             * query._id = {$in : tickets};
+             */
+        }
+        const tickets = await Ticket.find(query);
+        if(tickets){
+            res.status(200).send(tickets);
+        }else{
+            res.status(200).send({
+                message : "No ticket has been created !!"
+            });
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).send({
+            message : err.name || "Internal Error"
+        })
+    }
+}

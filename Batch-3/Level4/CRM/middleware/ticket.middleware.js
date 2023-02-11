@@ -2,11 +2,14 @@
  * this file will validate the req body of ticket.
  */
 
+const { User } = require("../model");
+const { userTypes, userStatus } = require("../utils/contants");
+
 /**
  * validating the request body for create method.
  */
 
-exports.validateReqBodyForCreatingTicket = (req,res,next)=>{
+exports.validateReqBodyForCreatingTicket = async (req,res,next)=>{
     /**
      * Madatory fields -
      * 
@@ -43,4 +46,24 @@ exports.validateReqBodyForCreatingTicket = (req,res,next)=>{
      *  
      * only admin can change the type of user(while updating).
      */
+
+
+    /**
+     * check is there any Engineer available or not
+     */
+    const engineer = await User.findOne({
+        userType : userTypes.engineer,
+        userStatus : userStatus.approved
+    });
+    if(!engineer){
+        console.log("No enginner available ,all engineers are on strike !!!");
+        return res.status(403).send({
+            message : "No enginner available ,all engineers are on strike, kindly check after some time !"
+        })
+    }
+
+    /**
+     * everything is ok,pass the control to next method
+     */
+    next();
 }
