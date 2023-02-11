@@ -2,7 +2,7 @@
  * this file will validate the req body of ticket.
  */
 
-const { User } = require("../model");
+const { User, Ticket } = require("../model");
 const { userTypes, userStatus } = require("../utils/contants");
 
 /**
@@ -66,4 +66,26 @@ exports.validateReqBodyForCreatingTicket = async (req,res,next)=>{
      * everything is ok,pass the control to next method
      */
     next();
+}
+
+
+/**
+ * middleware for checking whether the caller who is tring to update the ticket is either
+ * 
+ * admin
+ * owner
+ * assignee
+ */
+
+exports.isValidTicketUpadteAccess = async (req,res,next)=>{
+    /**
+     * we will get userId after validating the ticket.
+     */
+
+    const user = await User.find({userId : req.userId});
+
+    /**
+     * ticketId will be provided in the path param.
+     */
+    const ticket = await Ticket.find({})
 }

@@ -139,3 +139,16 @@ exports.searchTickets = async (req,res)=>{
         })
     }
 }
+
+
+/**
+ * logic for updating the tickets
+ * who should be allowed to update the tickts ??
+ *      ---- owner of the ticket.
+ *      ---- engineer who is assigned to that ticket.
+ *      ---- admin user.
+ */
+
+exports.updateTicket = (req,res)=>{
+
+}

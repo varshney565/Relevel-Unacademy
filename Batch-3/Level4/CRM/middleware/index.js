@@ -1,7 +1,7 @@
-let signupValidator = require('./auth.middleware');
+let signupValidator = require('./auth.requestValidator');
 let authjwt = require('./auth.jwt');
 let userActivities = require('./user.middleware');
-let ticketValidator = require('./ticket.middleware');
+let ticketValidator = require('./ticket.requestValidator');
 /**
  * exporting the functionalities of all the middleware functions.
  */
