@@ -44,6 +44,18 @@ module.exports = (mongoose)=>{
             required : true,
             default : userStatus.approved,
             enum : [userStatus.pending,userStatus.approved,userStatus.rejected]
+        },
+        ticketsCreated : {
+            type : [mongoose.SchemaTypes.ObjectId],
+            ref : "Ticket"
+        },
+        ticketsAssigned : {
+            type : [mongoose.SchemaTypes.ObjectId],
+            ref : "Ticket"
+        },
+        openTickets : {
+            type : Number,
+            default : 0
         }
     });
     return mongoose.model('user',userSchema);

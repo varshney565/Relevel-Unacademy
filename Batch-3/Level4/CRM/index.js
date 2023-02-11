@@ -84,7 +84,10 @@ require('./routes/auth.routes')(app);
  * route for users.
  */
 require('./routes/user.route')(app);
-
+/**
+ * route for tickets.
+ */
+require('./routes/ticket.routes')(app);
 
 
 
