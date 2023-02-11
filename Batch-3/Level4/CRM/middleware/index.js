@@ -1,6 +1,6 @@
 let signupValidator = require('./auth.requestValidator');
 let authjwt = require('./auth.jwt');
-let userActivities = require('./user.middleware');
+let userActivities = require('./user.requestValidator');
 let ticketValidator = require('./ticket.requestValidator');
 /**
  * exporting the functionalities of all the middleware functions.
@@ -13,5 +13,8 @@ module.exports = {
     isValidUserIdInPathparam : userActivities.isValidUserIdInPathparam,
     isOwnerOrAdmin : userActivities.isOwnerOrAdmin,
     isAdminUpdate : userActivities.isAdminUpdate,
-    validateReqBodyForCreatingTicket : ticketValidator.validateReqBodyForCreatingTicket
+    validateReqBodyForCreatingTicket : ticketValidator.validateReqBodyForCreatingTicket,
+    isValidTicketUpadteAccess : ticketValidator.isValidTicketUpadteAccess,
+    isValidTicketId : ticketValidator.isValidTicketId,
+    isAdminUpdateForPrivateFields : ticketValidator.isAdminUpdateForPrivateFields
 }

@@ -31,7 +31,7 @@ exports.isValidUserIdInPathparam = async (req,res,next)=>{
         const user = await User.findOne({userId : id});
         if(!user){
             console.log("No such user with this userId !!");
-            res.status(404).send({
+            res.status(400).send({
                 message : "No such user with this userId found !!"
             })
             return;

@@ -17,5 +17,6 @@ module.exports = {
     findByUserId : user.findByUserId,
     update : user.update,
     createTicket : ticket.createTicket,
-    searchTicket : ticket.searchTickets
+    searchTicket : ticket.searchTickets,
+    updateTicket : ticket.updateTicket
 }

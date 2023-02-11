@@ -149,6 +149,26 @@ exports.searchTickets = async (req,res)=>{
  *      ---- admin user.
  */
 
-exports.updateTicket = (req,res)=>{
-
+exports.updateTicket = async (req,res)=>{
+    /**
+     * find the ticket that we want to update
+     */
+    try{
+        const ticket = await Ticket.findOne({_id : req.params.id});
+        ticket.description = req.body.description ? req.body.description : ticket.description;
+        ticket.title = req.body.title ? req.body.title : ticket.title;
+        ticket.ticketPriority = req.body.ticketPriority ? req.body.ticketPriority : ticket.ticketPriority;
+        ticket.status = req.body.status ? req.body.status : ticket.status;
+        ticket.assignee = req.body.assignee ? req.body.assignee : ticket.assignee;
+        await ticket.save();
+        res.status(200).send({
+            message : "ticket Updated Successfully !!",
+            updatedTicket : ticket
+        });
+    }catch(err){
+        console.log(err);
+        res.status(500).send({
+            message : err.name || "Internal Error !"
+        })
+    }
 }
