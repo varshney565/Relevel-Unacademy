@@ -206,7 +206,8 @@ exports.isAdminUpdateForPrivateFields = async (req,res,next)=>{
         /**
          * changing the assignee of the ticket.
          */
-        if(req.body.assignee){
+        const ticket = await Ticket.findOne({_id : req.params.id});
+        if(req.body.assignee && req.body.assignee != ticket.assignee){
             if(user.userType != userTypes.admin){
                 console.log("Only admin can reassign a ticket to another engineer");
                 return res.status(403).send({
@@ -237,7 +238,7 @@ exports.isAdminUpdateForPrivateFields = async (req,res,next)=>{
         /**
          * changing the ticketPriority
          */
-        if(req.body.ticketPriority){
+        if(req.body.ticketPriority && req.body.ticketPriority != ticket.ticketPriority){
             if(user.userType != userTypes.admin){
                 console.log("Only admin can change the ticket-priority.");
                 return res.status(403).send({
