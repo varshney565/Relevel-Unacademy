@@ -46,7 +46,7 @@ exports.acceptNotificationRequest = async (req,res)=>{
  * validation of id will be done in the middleware
  */
 
-exports.trackNotification = asnc (req,res)=>{
+exports.trackNotification = async (req,res)=>{
     /**
      * fetch the tracking id that has been passed in the path param.
      */
