@@ -18,8 +18,23 @@ require('./config');
 /**
  * making the connection with the database.
  */
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DB_URL);
+const database = mongoose.connection;
 
+database.on('error',()=>{
+    console.log("Some error while connecting to the database.");
+})
 
+database.once('open',()=>{
+    console.log("Successfully connected with the database.");
+})
+
+/**
+ * getting all the collections that are supposed to be in my databse.
+ */
+
+require('./model');
 
 /**
  * starting the server.
