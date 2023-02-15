@@ -29,7 +29,7 @@ const { transporter } = require('../notifiers/emailService');
 const { notification } = require('../model');
 const { notificationStatus } = require('../utils/constants');
 
-cron.schedule("* */5 * * * *",async ()=>{
+cron.schedule("*/5 * * * *",async ()=>{
     /**
      * find the notifications that are in pending state.
      */
