@@ -5,7 +5,7 @@
 const { notificationStatus } = require("../utils/constants");
 
 module.exports = (mongoose)=>{
-    const notificationSchema = mongoose.createSchema({
+    const notificationSchema = new mongoose.Schema({
         subject : {
             type : String,
             required : true
@@ -15,7 +15,8 @@ module.exports = (mongoose)=>{
             required : true
         },
         requester : {
-            type : String
+            type : String,
+            required : true
         },
         recepientEmails : {
             type : [String],

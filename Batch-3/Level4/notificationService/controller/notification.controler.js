@@ -15,7 +15,7 @@ exports.acceptNotificationRequest = async (req,res)=>{
      * create notification object that is needed to be inserted in the database.
      */
     const notificationPassed = {
-        subject : req.body.Subject,
+        subject : req.body.subject,
         content : req.body.content,
         requester : req.body.requester,
         recepientEmails : req.body.recepientEmails

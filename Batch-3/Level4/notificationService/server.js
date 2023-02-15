@@ -31,11 +31,9 @@ database.once('open',()=>{
 })
 
 /**
- * getting all the collections that are supposed to be in my databse.
+ * routes for notifications.
  */
-
-require('./model');
-
+require('./routes/notification.routes')(app);
 /**
  * starting the server.
  */
