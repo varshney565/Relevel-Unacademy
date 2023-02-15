@@ -9,8 +9,8 @@
  */
 
 const { User, Ticket } = require('../model');
-const { userTypes, userStatus } = require('../utils/contants');
-
+const { userTypes, userStatus, adminEmail } = require('../utils/contants');
+const sendEmail = require('../utils/notificationClient');
 
 /**
  * logic for creating a ticket : 
@@ -21,7 +21,7 @@ const { userTypes, userStatus } = require('../utils/contants');
  *          -- Middleware
  * 3. once the ticket is created make sure that engineer and customer records also got updated
  *          -- ticketAssigned and ticketCreated
- * 
+ * 4. send the email to all the stack holders once the ticket has beedn created.
  */
 
 exports.createTicket = async (req,res)=>{
@@ -49,7 +49,6 @@ exports.createTicket = async (req,res)=>{
         /**
          * update Engineer record.
          */
-        console.log(engineer);
         engineer.openTickets = engineer.openTickets + 1;
         engineer.ticketsAssigned.push(ticket._id);
         await engineer.save();
@@ -60,6 +59,11 @@ exports.createTicket = async (req,res)=>{
         const user = await User.findOne({userId : req.userId});
         user.ticketsCreated.push(ticket._id);
         await user.save();
+        /**
+         * send a request to notification service for sending the email
+         */
+        const recepientEmails = engineer.email
+        sendEmail(`ticket received with id : ${ticket._id} - ${ticket.title}`,`Your ticket has been accepted by ${engineer.name},please come online to make it resolve.`,`${engineer.email},${user.email},${adminEmail}`,"CRM application");
         /**
          * return the ticket.
          */

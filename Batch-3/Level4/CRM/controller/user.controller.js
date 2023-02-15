@@ -75,6 +75,7 @@ exports.update = async (req,res)=>{
     user.userStatus = req.body.userStatus ? req.body.userStatus : user.userStatus;
     user.userType = req.body.userType ? req.body.userType : user.userType;
     await user.save();
+    console.log(`${user.userId} has been updated.`);
     res.status(200).send({
         message : "successfully updated.",
         user : objectConvertor([user])

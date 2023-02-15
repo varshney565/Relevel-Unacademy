@@ -13,5 +13,6 @@ module.exports = {
         open : "OPEN",
         closed : "CLOSED",
         blocked : "BLOCKED"
-    }
+    },
+    adminEmail : "shivamvarshney565@gmail.com"
 }

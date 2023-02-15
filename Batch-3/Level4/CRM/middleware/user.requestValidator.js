@@ -103,7 +103,6 @@ exports.isOwnerOrAdmin = async (req,res,next)=>{
              * pass the control to next call,
              * because admin has the access to fetch any record.
              * */
-            console.log("YES");
             next();
             return;
         }
