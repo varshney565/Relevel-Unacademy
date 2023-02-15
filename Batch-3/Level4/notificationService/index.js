@@ -35,6 +35,10 @@ database.once('open',()=>{
  */
 require('./routes/notification.routes')(app);
 /**
+ * attaching the cron file.
+ */
+require('./schedulers/email.scheduler');
+/**
  * starting the server.
  */
 

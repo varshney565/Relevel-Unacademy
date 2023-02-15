@@ -19,7 +19,7 @@ module.exports = (mongoose)=>{
             required : true
         },
         recepientEmails : {
-            type : [String],
+            type : String,
             required : true
         },
         status : {
