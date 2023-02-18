@@ -7,8 +7,11 @@
 <script>
     var socket = io();
 
-    socket.on("message",(data)=>{   
-        document.write(data);
+    // socket.on("message",(data)=>{   
+    //     document.write(data);
+    // })
+    socket.on('testingEvent',(data)=>{
+        document.write(data.description);
     })
 </script>
 <body>

@@ -23,7 +23,10 @@ io.on('connection',(socket)=>{
      * send some message to the client after 5 seconds of connection
      */
     setTimeout(()=>{
-        socket.send("Hello from server after 5 seconds !!");
+        // socket.send("Hello from server after 5 seconds !!");
+        socket.emit('testingEvent',{
+            description : "this is a custom event message !"
+        })
     },5000)
 
     //when the client is closed
