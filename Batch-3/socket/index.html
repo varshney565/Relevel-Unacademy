@@ -6,6 +6,10 @@
 <script src = "/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
+
+    socket.on("message",(data)=>{   
+        document.write(data);
+    })
 </script>
 <body>
     Testing html code

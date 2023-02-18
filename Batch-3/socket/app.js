@@ -18,6 +18,14 @@ const io = new socket.Server(server);
 io.on('connection',(socket)=>{
     console.log("one client connected.");
 
+
+    /**
+     * send some message to the client after 5 seconds of connection
+     */
+    setTimeout(()=>{
+        socket.send("Hello from server after 5 seconds !!");
+    },5000)
+
     //when the client is closed
     socket.on('disconnect',()=>{
         console.log("one client disconnected.")
