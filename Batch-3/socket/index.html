@@ -7,12 +7,23 @@
 <script>
     var socket = io();
 
-    // socket.on("message",(data)=>{   
-    //     document.write(data);
-    // })
+    /**
+     * server sending message using default 'message' event
+     * */
+    socket.on("message",(data)=>{   
+        document.write(data);
+    })
+
+    /**
+     * receiving message from server using custom event.
+     * */
     socket.on('testingEvent',(data)=>{
         document.write(data.description);
     })
+    /**
+     * sending message from client to server using custome event.
+     * */
+    socket.emit('testEvent2',"sending message");
 </script>
 <body>
     Testing html code

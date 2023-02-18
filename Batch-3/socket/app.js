@@ -18,12 +18,26 @@ const io = new socket.Server(server);
 io.on('connection',(socket)=>{
     console.log("one client connected.");
 
+    /**
+     * task 4
+     * receiving some message from client using custom event.
+     */
+    socket.on('testEvent2',(data)=>{
+        console.log(data);
+    })
 
     /**
      * send some message to the client after 5 seconds of connection
      */
     setTimeout(()=>{
-        // socket.send("Hello from server after 5 seconds !!");
+        /** 
+         * task 2
+         * socket.send("Hello from server after 5 seconds !!");         * 
+         *  */ 
+        /**
+         * task 3
+         * writing our own custom event and sending message from server to client.
+         */
         socket.emit('testingEvent',{
             description : "this is a custom event message !"
         })
