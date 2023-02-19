@@ -8,7 +8,10 @@
     var socket = io();
     socket.on('broadcast',(data)=>{
         document.body.innerHTML = "";
-        document.write(data.description);
+        document.write("<h2>"+data.description+"</h2>");
+        document.write("\n");
+        if(data.message)
+            document.write(data.message);
     });
 </script>
 <body>

@@ -19,9 +19,16 @@ io.on('connection',(socket)=>{
     console.log("one client connected");
     clientCount++;
     /**
-     * all the users that are in the system will be notified , including the new guy also
+     * all the guys gets the briadcast message except the new guy
      */
-    io.sockets.emit('broadcast',{
+
+    //for the client which is getting connected
+    socket.emit('broadcast',{
+        description : "Hey Welcome !"
+    });
+
+    //for broadcating to every other client
+    socket.broadcast.emit('broadcast',{
         description : "client connected = "+clientCount
     })
 
@@ -29,7 +36,7 @@ io.on('connection',(socket)=>{
     socket.on('disconnect',()=>{
         console.log("one client disconnected.")
         clientCount--;
-        io.sockets.emit('broadcast',{
+        socket.broadcast.emit('broadcast',{
             description : "client connected = "+clientCount
         })
     });
