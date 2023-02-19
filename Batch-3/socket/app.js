@@ -14,38 +14,24 @@ const io = new socket.Server(server);
 /**
  * when client is trying to connect to the server.
  */
-
+let clientCount = 0;
 io.on('connection',(socket)=>{
-    console.log("one client connected.");
-
+    console.log("one client connected");
+    clientCount++;
     /**
-     * task 4
-     * receiving some message from client using custom event.
+     * all the users that are in the system will be notified , including the new guy also
      */
-    socket.on('testEvent2',(data)=>{
-        console.log(data);
+    io.sockets.emit('broadcast',{
+        description : "client connected = "+clientCount
     })
-
-    /**
-     * send some message to the client after 5 seconds of connection
-     */
-    setTimeout(()=>{
-        /** 
-         * task 2
-         * socket.send("Hello from server after 5 seconds !!");         * 
-         *  */ 
-        /**
-         * task 3
-         * writing our own custom event and sending message from server to client.
-         */
-        socket.emit('testingEvent',{
-            description : "this is a custom event message !"
-        })
-    },5000)
 
     //when the client is closed
     socket.on('disconnect',()=>{
         console.log("one client disconnected.")
+        clientCount--;
+        io.sockets.emit('broadcast',{
+            description : "client connected = "+clientCount
+        })
     });
 }); 
 

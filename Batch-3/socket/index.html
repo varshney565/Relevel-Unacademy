@@ -6,27 +6,10 @@
 <script src = "/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
-
-    /**
-     * task 2
-     * server sending message using default 'message' event
-     * */
-    socket.on("message",(data)=>{   
-        document.write(data);
-    })
-
-    /**
-     * task 3
-     * receiving message from server using custom event.
-     * */
-    socket.on('testingEvent',(data)=>{
+    socket.on('broadcast',(data)=>{
+        document.body.innerHTML = "";
         document.write(data.description);
-    })
-    /**
-     * task 4
-     * sending message from client to server using custome event.
-     * */
-    socket.emit('testEvent2',"sending message");
+    });
 </script>
 <body>
     Testing html code
