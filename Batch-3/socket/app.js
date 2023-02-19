@@ -15,6 +15,7 @@ const io = new socket.Server(server);
  * when client is trying to connect to the server.
  */
 let clientCount = 0;
+const userIds = {};
 const users = [];
 console.log(users);
 io.on('connection',(socket)=>{
@@ -37,6 +38,7 @@ io.on('connection',(socket)=>{
         }else{
             console.log(`new entry of user : ${data} in the database.`);
             users.push(data);
+            userIds[socket.id] = data;
             socket.emit('userAllowed',{
                 userName : data,
             });
@@ -48,7 +50,10 @@ io.on('connection',(socket)=>{
     })
 
     socket.on('disconnect',()=>{
-        
+        const user = userIds[socket.id];
+        let ind = users.indexOf(user);
+        users.splice(ind,1);
+        delete userIds[socket.id];
     })
 }); 
 
