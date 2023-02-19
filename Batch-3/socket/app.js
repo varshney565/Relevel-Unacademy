@@ -15,31 +15,41 @@ const io = new socket.Server(server);
  * when client is trying to connect to the server.
  */
 let clientCount = 0;
+const users = [];
+console.log(users);
 io.on('connection',(socket)=>{
-    console.log("one client connected");
     clientCount++;
-    /**
-     * all the guys gets the briadcast message except the new guy
-     */
-
-    //for the client which is getting connected
-    socket.emit('broadcast',{
-        description : "Hey Welcome !"
-    });
-
-    //for broadcating to every other client
-    socket.broadcast.emit('broadcast',{
-        description : "client connected = "+clientCount
+    //setUserName --> respond with either userExists or userAllowed(res:username)
+    //sendMessage
+    //newMessage
+    function userExists(data){
+        return users.includes(data);
+    }
+    socket.on('setUserName',(data)=>{
+        /**
+         * check if user exists or not,if yes userExists
+         * otherwise userAllowed.
+         */
+        
+        if(userExists(data)){
+            console.log(`${data} is already present in the databse !`);
+            socket.emit('userExists',"user is already present !");
+        }else{
+            console.log(`new entry of user : ${data} in the database.`);
+            users.push(data);
+            socket.emit('userAllowed',{
+                userName : data,
+            });
+        }
     })
 
-    //when the client is closed
+    socket.on('sendMessage',(data)=>{
+        io.sockets.emit('newMessage',data);
+    })
+
     socket.on('disconnect',()=>{
-        console.log("one client disconnected.")
-        clientCount--;
-        socket.broadcast.emit('broadcast',{
-            description : "client connected = "+clientCount
-        })
-    });
+        
+    })
 }); 
 
 app.get("/",(req,res)=>{
